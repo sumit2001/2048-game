@@ -134,9 +134,21 @@ var arr = [
 
 
   function print(a){                    //this function will print the board
+    const array = [];
     for(var i=0;i<4;i++){
-        console.log(...a[i]);
+        const keys={myId: "Row ", col_0: '-', col_1: '-', col_2: '-', col_3: '-'};
+        keys.myId=keys.myId+i;
+        keys.col_0=arr[i][0]==0?'-':arr[i][0];
+        keys.col_1=arr[i][1]==0?'-':arr[i][1];
+        keys.col_2=arr[i][2]==0?'-':arr[i][2];
+        keys.col_3=arr[i][3]==0?'-':arr[i][3];
+        array.push(keys);
     }
+    const transformed = array.reduce((acc, {myId, ...x}) => { acc[myId] = x; return acc}, {})
+    console.table(transformed)
+    // for(var i=0;i<4;i++){
+    //     console.log(...a[i]);
+    // }
   }
 
   function checkIfWon(){                //this function will check if game is won or not
