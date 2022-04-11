@@ -1,3 +1,4 @@
+move=new Audio('music/move.mp3');
 var arr = [
     [0,0,0,0],
     [0,0,0,0],
@@ -5,10 +6,26 @@ var arr = [
     [0,0,0,0] 
   ];                        //default board
 
+var colMap={
+    0:"FFCCCC",
+    2:"FFE5CC",
+    4:"FFCC99",
+    8:"FFB266",
+    16:"FF9933",
+    32:"FF8000",
+    64:"CC6600",
+    128:"994C00",
+    256:"663300",
+    512:"660000",
+    1024:"333300",
+    2048:"331900",
+    4096:"000000",
+}
+
  var arr24=[2,4];           // values to be inserted randomly in array
   var highest=0;            // highest value till the game
   var gameOn=false;         // game is on or not
-
+    var won=false;
   function random(n){       // return a random value between 0 and n (includes 0)
     return Math.floor((Math.random() * n));
   }
@@ -16,28 +33,32 @@ var arr = [
   document.onkeydown = checkKey;
 
   function checkKey(e) {            // detecting arrow keys
-  
+    move.play();
+    // setTimeout(()=>{
+    //     move.pause();
+    // },100);
       e = e || window.event;
       if(gameOn){
         if (e.keyCode == '38') {
-            printMessages("top move");
+            // printMessages("top move");
             topp();
             // up arrow
         }
         else if (e.keyCode == '40') {
-            printMessages("bottom move");
+            // printMessages("bottom move");
             bottom();               // down arrow
         }
         else if (e.keyCode == '37') {
            // left arrow
-            printMessages("left move");
+            // printMessages("left move");
            left();
         }
         else if (e.keyCode == '39') {
            // right arrow
-            printMessages("right move");
+            // printMessages("right move");
            right();
         }
+        ui();
       }
       
   
@@ -53,39 +74,41 @@ var arr = [
       highest=Math.max(highest,rn2);
     let rn=rasi();                          //will get a place where no number is placed initially
     arr[rn[0]][rn[1]]=rn2;
-    print(arr);
-    while(gameOn){
-        var dir=prompt("Enter Direction (1 for left, 2 for right, 3 for top, 4 for bottom, 0 for exit, 9 to play with arrow keys)");
-        if (dir == 3) {
-            printMessages("top move");
-            topp();                 // up arrow
-        }
-        else if (dir == 4) {
-            printMessages("bottom move");
-            bottom();                   // down arrow
-        }
-        else if (dir == 1) {         // left arrow
-            printMessages("left move");
-           left();
-        }
-        else if (dir == 2) {
-            printMessages("right move");
-           right();                 // right arrow
-        }else if(dir==0){
-            printMessages("GAME END");
-            gameOn=false;
-            break;                  //exit
-        }else if(dir==9){           //switch to arrow mode
-            printMessages("Switched to arrow mode");
-            break;
-        }
+    ui();
+    // print(arr);
+    // while(gameOn){
+    //     var dir=prompt("Enter Direction (1 for left, 2 for right, 3 for top, 4 for bottom, 0 for exit, 9 to play with arrow keys)");
+    //     if (dir == 3) {
+    //         printMessages("top move");
+    //         topp();                 // up arrow
+    //     }
+    //     else if (dir == 4) {
+    //         printMessages("bottom move");
+    //         bottom();                   // down arrow
+    //     }
+    //     else if (dir == 1) {         // left arrow
+    //         printMessages("left move");
+    //        left();
+    //     }
+    //     else if (dir == 2) {
+    //         printMessages("right move");
+    //        right();                 // right arrow
+    //     }else if(dir==0){
+    //         printMessages("GAME END");
+    //         gameOn=false;
+    //         break;                  //exit
+    //     }else if(dir==9){           //switch to arrow mode
+    //         printMessages("Switched to arrow mode");
+    //         break;
+    //     }
             
-    }
+    // }
       
   }
-  function printMessages(str){
-        console.log("---"+str+"---");
-  }
+//   function printMessages(str){
+//         console.log("---"+str+"---");
+//   }
+  startGame();
   function startGame(){                 //this function will start the game
       highest=0;
       gameOn=true;
@@ -95,7 +118,9 @@ var arr = [
         [0,0,0,0],
         [0,0,0,0] 
       ];
-      printMessages("New Game Started");
+      document.querySelector('.message').style["display"]="none";
+      document.querySelector('.resume').style["display"]="none";
+    //   printMessages("New Game Started");
       engine();
   }
 
@@ -129,35 +154,47 @@ var arr = [
                 return false;
         }
     }
+    document.querySelector('.message').style["display"]="block";
+    document.querySelector('.message').innerText="Game Over";
     return true;
   }
 
 
-  function print(a){                    //this function will print the board
-    const array = [];
-    for(var i=0;i<4;i++){
-        const keys={myId: "Row ", col_0: '-', col_1: '-', col_2: '-', col_3: '-'};
-        keys.myId=keys.myId+i;
-        keys.col_0=arr[i][0]==0?'-':arr[i][0];
-        keys.col_1=arr[i][1]==0?'-':arr[i][1];
-        keys.col_2=arr[i][2]==0?'-':arr[i][2];
-        keys.col_3=arr[i][3]==0?'-':arr[i][3];
-        array.push(keys);
-    }
-    const transformed = array.reduce((acc, {myId, ...x}) => { acc[myId] = x; return acc}, {})
-    console.table(transformed)
+//   function print(a){                    //this function will print the board
+//     const array = [];
+//     for(var i=0;i<4;i++){
+//         const keys={myId: "Row ", col_0: '-', col_1: '-', col_2: '-', col_3: '-'};
+//         keys.myId=keys.myId+i;
+//         keys.col_0=arr[i][0]==0?'-':arr[i][0];
+//         keys.col_1=arr[i][1]==0?'-':arr[i][1];
+//         keys.col_2=arr[i][2]==0?'-':arr[i][2];
+//         keys.col_3=arr[i][3]==0?'-':arr[i][3];
+//         array.push(keys);
+//     }
+//     const transformed = array.reduce((acc, {myId, ...x}) => { acc[myId] = x; return acc}, {})
+//     console.table(transformed)
     // for(var i=0;i<4;i++){
     //     console.log(...a[i]);
     // }
-  }
+//   }
 
   function checkIfWon(){                //this function will check if game is won or not
-      if(highest==2048){
-            printMessages("You Won");
+      if(highest==2048&&!won){
+            // printMessages("You Won");
+            document.querySelector('.message').style["display"]="block";
+            document.querySelector('.message').innerText="You Won";
+            document.querySelector('.resume').style["display"]="inline";
             gameOn=false;
+            won=true;
             return true;
       }
       return false;
+  }
+
+  function resume(){
+    document.querySelector('.resume').style["display"]="none";
+    document.querySelector('.message').style["display"]="none";
+    gameOn=true;
   }
 
   function findAndEnterNextRandom(){            //this will place some digit in next random value
@@ -166,8 +203,8 @@ var arr = [
     arr[rn[0]][rn[1]]=rn2;
     if(rn[2]==2){
         if(checkIfOver()){
-            print(arr);
-            printMessages("You Lose!!");
+            // print(arr);
+            // printMessages("You Lose!!");
             gameOn=false;
         }
     }
@@ -177,8 +214,8 @@ var arr = [
     if(overall){
         findAndEnterNextRandom();
     }
-    if(gameOn)  
-       print(arr);
+    // if(gameOn)  
+    //    print(arr);
   }
 
   function right(){                             //this function will manage the board when right arrow will be pressed
@@ -342,3 +379,33 @@ var arr = [
     }
     printAndGetRandom(overall);
   }
+
+  function ui(){
+      for(var i=0;i<4;i++){
+        for(var j=0;j<4;j++){
+            let n=i*4+j;
+            let change='';
+            if(arr[i][j]!=0)
+                change=arr[i][j];
+            document.querySelector('.box'+n).querySelector('.boxtext').innerText=change;
+            // console.log(colMap[arr[i][j]]);
+            document.querySelector('.box'+n).style["background-color"]="#"+colMap[arr[i][j]];
+            if(arr[i][j]>=64){
+                document.querySelector('.box'+n).style["color"]="white";
+            }else{
+                document.querySelector('.box'+n).style["color"]="black";
+            }
+            if(arr[i][j]>512){
+                document.querySelector('.box'+n).style["font-size"]="3vw";
+            }else{
+                document.querySelector('.box'+n).style["font-size"]="4vw";
+            }
+        }
+      }
+    //   let boxes=document.getElementsByClassName("box");
+    // Array.from(boxes).forEach(element=>{
+    //     let boxtext=element.querySelector('.boxtext');
+    //     boxtext.innerText="a";
+    // })
+  }
+//   ui();
