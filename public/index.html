@@ -17,7 +17,7 @@
   </head>
   <body>
     <div class="cont">
-      <h1>Welcome to Game 2048</h1>
+      <h1 class="py-3">Welcome to Game 2048</h1>
       <div class="gameContainer">
         <!-- Modal -->
         <div
@@ -60,19 +60,25 @@
           </div>
         </div>
 
-        <div class="buttons">
+        <div class="buttons" style="margin-top: 2%">
           <button
             type="button"
             class="btn"
             data-bs-toggle="modal"
             data-bs-target="#staticBackdrop"
+            style="color: blue"
+            ;
           >
             <b> <u>How to Play ?</u></b>
           </button>
           <button onclick="resume()" class="resume">Resume</button>
           <button onclick="startGame()" class="reload">Reload</button>
         </div>
-        <div class="container">
+
+        <div
+          class="container my-3"
+          style="margin-left: 100%; margin-right: 100%"
+        >
           <div class="line"></div>
           <div class="box0 box br-0 bb-0"><span class="boxtext"></span></div>
           <div class="box1 box br-0 bb-0"><span class="boxtext"></span></div>
@@ -91,6 +97,7 @@
           <div class="box14 box br-0"><span class="boxtext"></span></div>
           <div class="box15 box"><span class="boxtext"></span></div>
         </div>
+
         <div class="message"></div>
       </div>
     </div>
